@@ -1,20 +1,14 @@
 package com.example.notebookmap.presentation.components
 
 import android.media.MediaPlayer
-import android.net.Uri
 import android.provider.OpenableColumns
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -23,20 +17,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -48,7 +41,7 @@ import androidx.core.net.toUri
 @Composable
 fun AudioBox(
     onClickedOnCross: () -> Unit,
-    audioUriString: String,
+    audioUriString: String
 ) {
     val context = LocalContext.current
     val audioUri = audioUriString.toUri()
@@ -58,12 +51,12 @@ fun AudioBox(
     // the MediaPlayer to play audio
     val mediaPlayer = remember { MediaPlayer.create(context, audioUri) }
     val icon = remember { mutableStateOf(Icons.Filled.PlayArrow) }
-    val isPlaying = remember { mutableStateOf(false) }
+    var isPlaying by remember { mutableStateOf(false) } // должно быть в VM
 
     val minSize = maxOf(
         LocalConfiguration.current.screenWidthDp.dp,
         LocalConfiguration.current.screenHeightDp.dp
-    ) / 16
+    ) / 16 // заменить
 
     // Получаем название аудио
     if (audioUri.scheme == "content") {
@@ -80,19 +73,19 @@ fun AudioBox(
 
     // Воспроизведение или пауза аудио
     val togglePlayback: () -> Unit = {
-        if (isPlaying.value) {
+        if (isPlaying) {
             mediaPlayer.pause()
             icon.value = Icons.Filled.PlayArrow
         } else {
             mediaPlayer.start()
             icon.value = Icons.Filled.Pause
         }
-        isPlaying.value = !isPlaying.value
+        isPlaying = !isPlaying
     }
 
     // Обработка окончания проигрывания аудио
     mediaPlayer.setOnCompletionListener {
-        isPlaying.value = false
+        isPlaying = false
         icon.value = Icons.Filled.PlayArrow
     }
 
@@ -115,13 +108,13 @@ fun AudioBox(
             verticalAlignment = Alignment.CenterVertically
         ) {
             // IconButton for audio Action
-            IconButton(onClick = { togglePlayback() }) {
+            IconButton(onClick = { togglePlayback() }) { // можно сделать private функцию
                 Icon(
                     imageVector = icon.value,
                     contentDescription = "icon",
                     tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
-                        .size(MaterialTheme.typography.headlineLarge.fontSize.value.dp)
+                        .size(MaterialTheme.typography.headlineLarge.fontSize.value.dp) // typography для текста
                         .defaultMinSize(minSize)
                         .clip(CircleShape)
                         .background(MaterialTheme.colorScheme.primaryContainer)
@@ -134,7 +127,7 @@ fun AudioBox(
                         ),
                 )
             }
-            IconButton(onClick = { onClickedOnCross() }) {
+            IconButton(onClick = { onClickedOnCross() }) { // копипаст
                 Icon(
                     imageVector = Icons.Filled.Close,
                     contentDescription = "icon",
@@ -154,7 +147,7 @@ fun AudioBox(
             }
             Text(
                 text = audioName,
-                color = MaterialTheme.colorScheme.onPrimary
+                color = MaterialTheme.colorScheme.onPrimary // почему onPrimary? нигде нет background = primary
             )
         }
     }

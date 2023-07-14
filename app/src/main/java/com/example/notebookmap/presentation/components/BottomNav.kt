@@ -15,7 +15,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.notebookmap.navigation.Screen
 
-
 @Composable
 fun BottomNav(navController: NavHostController) {
 
@@ -41,7 +40,6 @@ private fun RowScope.AddItem(
     navController: NavHostController
 ) {
     BottomNavigationItem(
-
         modifier = Modifier.background(MaterialTheme.colors.primary),
         label = {
             Text(text = screen.title ?: "", style = MaterialTheme.typography.caption)

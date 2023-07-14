@@ -48,15 +48,12 @@ class NoteDescriptionViewModel(private val repository: Repository, noteId: Long)
             Log.d("NoteDescriptionInit", "${viewState.value.note}")
         }
     }
-    override fun setInitialState() =
-        NoteDescriptionContract.State(isLoading = true)
+    override fun setInitialState() = NoteDescriptionContract.State()
 
-    override fun handleEvents(event: NoteDescriptionContract.Event) {
+    override fun handleEvents(event: NoteDescriptionContract.Event) { // вынести в функции
         when (event) {
-            is NoteDescriptionContract.Event.AttemptToClose -> {
-                setState {
-                    copy(isLoading = !isLoading)
-                }
+            is NoteDescriptionContract.Event.AttemptToClose -> { // UI не должен контролировать состояние загрузки
+                setState { copy(isLoading = !isLoading) }
                 Log.d("NotesSelectionEvent", "${viewState.value.note}")
             }
 
@@ -180,9 +177,9 @@ class NoteDescriptionViewModel(private val repository: Repository, noteId: Long)
         }*/
         if (!noteLoaded) {
             val note = repository.getNoteById(id = id).first()
-            setState { copy(note = note) }
-            setState { copy(newNoteTitle = note.noteTitle) }
-            setState { copy(newNoteText = note.noteText!!) }
+            setState { copy(note = note) } // ??
+            setState { copy(newNoteTitle = note.noteTitle) } // ??
+            setState { copy(newNoteText = note.noteText!!) } // ??
             Log.d("NoteDescription getNote", "$note")
         }
     }
@@ -197,9 +194,13 @@ class NoteDescriptionViewModel(private val repository: Repository, noteId: Long)
         }*/
         if (!photoLoaded) {
             val photos = repository.getPhotosByNoteId(id = id).first()
-                setState { copy(sourcePhotosUri = photos) }
-                setState { copy(newPhotosUri = photos.toMutableStateList()) }
-                Log.d("NoteDescription getPhotos", "$photos")
+            Log.d("NoteDescription getPhotos", "$photos")
+            setState {
+                copy(
+                    sourcePhotosUri = photos,
+                    newPhotosUri = photos.toMutableStateList()
+                )
+            }
         }
     }
 
@@ -228,8 +229,8 @@ class NoteDescriptionViewModel(private val repository: Repository, noteId: Long)
         }*/
         if (!audioLoaded) {
             val audios = repository.getAudiosByNoteId(id = id).first()
-                setState { copy(sourceAudiosUri = audios) }
-                setState { copy(newAudiosUri = audios.toMutableStateList()) }
+                setState { copy(sourceAudiosUri = audios) } // ??
+                setState { copy(newAudiosUri = audios.toMutableStateList()) } // ??
                 Log.d("NoteDescription getAudios", "$audios")
         }
     }

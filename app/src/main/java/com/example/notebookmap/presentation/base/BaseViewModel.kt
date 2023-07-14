@@ -1,5 +1,6 @@
 package com.example.notebookmap.presentation.base
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -36,12 +37,14 @@ abstract class BaseViewModel
 
     protected fun setState(reducer: UiState.() -> UiState) {
         val newState = viewState.value.reducer()
+        //Log.d("BASE", "new state = $newState")
         _viewState.value = newState
     }
 
     private fun subscribeToEvents() {
         viewModelScope.launch {
             _event.collect {
+                Log.d("BASE", "event = $it")
                 handleEvents(it)
             }
         }
@@ -51,6 +54,7 @@ abstract class BaseViewModel
 
     protected fun setEffect(builder: () -> Effect) {
         val effectValue = builder()
+        Log.d("BASE", "effect = $effectValue")
         viewModelScope.launch { _effect.send(effectValue) }
     }
 }

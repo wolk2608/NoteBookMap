@@ -1,6 +1,5 @@
 package com.example.notebookmap.navigation
 
-import android.content.res.Resources.Theme
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -10,7 +9,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.notebookmap.presentation.components.BottomNav
@@ -46,9 +44,9 @@ fun SetupNavGraph() {
     Scaffold(
         topBar = {},
         bottomBar = { BottomNav(navController = navController) },
-        content = {
+        content = { padding ->
             AnimatedNavHost(
-                modifier = Modifier.padding(it),
+                modifier = Modifier.padding(padding),
                 navController = navController,
                 startDestination = Screen.Map.route) {
                 composable(
@@ -100,10 +98,9 @@ fun SetupNavGraph() {
                     arguments = listOf(navArgument(Constants.DESCRIPTION_ARGUMENT) { type = NavType.LongType })
                 ) {
                     val noteId = it.arguments?.getLong(Constants.DESCRIPTION_ARGUMENT) ?: -1L
-                    val viewModel = koinViewModel<NoteDescriptionViewModel>() { parametersOf(noteId) }
-                    val state = viewModel.viewState.value
+                    val viewModel = koinViewModel<NoteDescriptionViewModel> { parametersOf(noteId) }
                     NoteDescriptionScreen(
-                        state = state,
+                        state = viewModel.viewState.value,
                         effectFlow = viewModel.effect,
                         onEventSent = viewModel::setEvent,
                         onNavigationRequested = { navigationEffect ->

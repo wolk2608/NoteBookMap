@@ -40,10 +40,10 @@ class NoteDescriptionContract {
         val sourceAudiosUri: List<String> = emptyList(),
         val newNoteTitle: String = "Новая заметка",
         val newNoteText: String = "",
-        val newPhotosUri: SnapshotStateList<String> = mutableStateListOf(),
-        val newVideosUri: SnapshotStateList<String> = mutableStateListOf(),
-        val newAudiosUri: SnapshotStateList<String> = mutableStateListOf(),
-        val isLoading: Boolean = false
+        val newPhotosUri: SnapshotStateList<String> = mutableStateListOf(), // state в state
+        val newVideosUri: SnapshotStateList<String> = mutableStateListOf(), //
+        val newAudiosUri: SnapshotStateList<String> = mutableStateListOf(), //
+        val isLoading: Boolean = true
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

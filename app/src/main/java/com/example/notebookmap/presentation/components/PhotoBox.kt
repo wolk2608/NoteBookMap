@@ -6,9 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,8 +17,10 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,17 +39,17 @@ import me.saket.telephoto.zoomable.coil.ZoomableAsyncImage
 fun PhotoBox(
     onClickedOnPhoto: () -> Unit,
     onClickedOnCross: () -> Unit,
-    photoUri: String,
+    photoUri: String
 ) {
-    val showDialog = remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) } // желательно вынести в viewModel
 
     Box(modifier = Modifier.size(100.dp)) {
         Button(
             modifier = Modifier
                 .size(100.dp)
-                .border(border = BorderStroke(1.dp, MaterialTheme.colorScheme.onPrimary)),
+                .border(border = BorderStroke(1.dp, MaterialTheme.colorScheme.onPrimary)), // вынести в параметр
             onClick = {
-                showDialog.value = true
+                showDialog = true
                 onClickedOnPhoto()
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
@@ -68,7 +68,7 @@ fun PhotoBox(
                     .clip(RectangleShape)
             )
         }
-        Icon(
+        Icon( // сделать больше или изменить
             modifier = Modifier
                 .size(15.dp)
                 .align(Alignment.TopEnd)
@@ -80,16 +80,13 @@ fun PhotoBox(
             tint = MaterialTheme.colorScheme.onPrimary
         )
     }
-    if (showDialog.value) {
+    if (showDialog) {
         Dialog(
-            properties = DialogProperties(usePlatformDefaultWidth = false),
-            onDismissRequest = { showDialog.value = false }) {
+            properties = DialogProperties(usePlatformDefaultWidth = false), // попробовать удалить
+            onDismissRequest = { showDialog = false }
+        ) {
             Box(
-                modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .padding(15.dp),
+                modifier = Modifier.fillMaxSize().padding(15.dp),
                 contentAlignment = Alignment.Center
             ) {
                 ZoomableAsyncImage(
@@ -103,7 +100,6 @@ fun PhotoBox(
                         .build(),
                     contentDescription = "Note photo"
                 )
-                //}
             }
         }
     }

@@ -1,8 +1,6 @@
 package com.example.notebookmap.presentation.components
 
-import android.content.Intent
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,11 +26,9 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import coil.ImageLoader
 import coil.compose.rememberAsyncImagePainter
 import coil.decode.VideoFrameDecoder
-
 
 @Composable
 fun VideoBox(
@@ -40,9 +36,6 @@ fun VideoBox(
     onClickedOnCross: () -> Unit,
     videoUri: String,
 ) {
-
-
-
     // Загрузчик для превью видео
     val imageLoader = ImageLoader.Builder(context = LocalContext.current)
         .components { add(VideoFrameDecoder.Factory()) }
@@ -60,7 +53,7 @@ fun VideoBox(
         Button(
             modifier = Modifier
                 .size(100.dp)
-                .border(border = BorderStroke(1.dp, MaterialTheme.colorScheme.onPrimary)),
+                .border(border = BorderStroke(1.dp, MaterialTheme.colorScheme.onPrimary)), // в параметр
             onClick = {
                 Log.d("video", "video before if show")
                 onClickedOnVideo()
@@ -100,7 +93,7 @@ fun VideoBox(
             contentDescription = "icon",
             tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
-                .size(15.dp)
+                .size(15.dp) //
                 .align(Alignment.TopEnd)
                 .background(MaterialTheme.colorScheme.primaryContainer)
                 .border(border = BorderStroke(1.dp, MaterialTheme.colorScheme.onPrimary))
