@@ -13,18 +13,18 @@
 
 ### Карта
 <p float="left">
-  <img src="/Readme images/MapPreviw1.jpg" />
-  <img src="/Readme images/MapPreviw2.jpg" />
+  <img src="/Readme images/MapPreviw1.jpg" width="150" />
+  <img src="/Readme images/MapPreviw2.jpg" width="150" />
 </p>
 
 ### Описание заметки
 <p float="left">
-  <img src="/Readme images/DescriptionPreview1.jpg" />
-  <img src="/Readme images/DescriptionPreview2.jpg" />
+  <img src="/Readme images/DescriptionPreview1.jpg" width="150" />
+  <img src="/Readme images/DescriptionPreview2.jpg" width="150" />
 </p>
 
 ### Список
 <p float="left">
-  <img src="/Readme images/ListPreview1.jpg" />
+  <img src="/Readme images/ListPreview1.jpg" width="150" />
 </p>
 
